@@ -1,0 +1,78 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+USE `mydb` ;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`jogadores`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`jogadores` (
+  `jogadores` INT NOT NULL,
+  `id_jogadores` VARCHAR(45) NULL,
+  `nome jogadores` VARCHAR(45) NULL,
+  `time esportes` VARCHAR(45) NULL,
+  PRIMARY KEY (`jogadores`),
+  UNIQUE INDEX `time esportes_UNIQUE` (`time esportes` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`times esportes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`times esportes` (
+  `time esportes` INT NOT NULL,
+  `idliga esportes` VARCHAR(45) NULL,
+  `nomes times` VARCHAR(45) NULL,
+  `nomes tecnicos` VARCHAR(45) NULL,
+  `confederação time` VARCHAR(45) NULL,
+  `jogadores_jogadores` INT NOT NULL,
+  PRIMARY KEY (`time esportes`),
+  INDEX `fk_times esportes_jogadores1_idx` (`jogadores_jogadores` ASC),
+  CONSTRAINT `fk_times esportes_jogadores1`
+    FOREIGN KEY (`jogadores_jogadores`)
+    REFERENCES `mydb`.`jogadores` (`jogadores`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`liga esportes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`liga esportes` (
+  `idliga esportes` INT NOT NULL,
+  `nome liga` VARCHAR(45) NULL,
+  `nome times` VARCHAR(45) NULL,
+  `times esportes_time esportes` INT NOT NULL,
+  PRIMARY KEY (`idliga esportes`),
+  INDEX `fk_liga esportes_times esportes1_idx` (`times esportes_time esportes` ASC),
+  CONSTRAINT `fk_liga esportes_times esportes1`
+    FOREIGN KEY (`times esportes_time esportes`)
+    REFERENCES `mydb`.`times esportes` (`time esportes`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.``
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`` (
+)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
