@@ -1,0 +1,158 @@
+CREATE TABLE IF NOT EXISTS `mydb`.`` (
+)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`conulta_paciente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`conulta_paciente` (
+  `cod_Pacientes_UBS` INT NULL,
+  `data consulta` DATE NULL,
+  `tipo de exame` VARCHAR(45) NULL,
+  `nome_medico` VARCHAR(45) NULL,
+  `local_exame` VARCHAR(45) NULL,
+  `nome_aconpanhante` VARCHAR(45) NULL,
+  PRIMARY KEY (`cod_Pacientes_UBS`),
+  UNIQUE INDEX `cod_Pacientes_UBS_UNIQUE` (`cod_Pacientes_UBS` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Pacientes_UBS`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Pacientes_UBS` (
+  `cod_Pacientes_UBS` INT NULL,
+  `nome_paciente` VARCHAR(45) NULL,
+  `endereco` VARCHAR(45) NULL,
+  `fone` VARCHAR(45) NULL,
+  `nome_pai` VARCHAR(45) NULL,
+  `nome mae` VARCHAR(45) NULL,
+  `idade` VARCHAR(45) NULL,
+  `email` VARCHAR(45) NULL,
+  `data consulta` DATE NULL,
+  `historico_consulta` DATETIME NULL,
+  `conulta_paciente_cod_Pacientes_UBS` INT NOT NULL,
+  PRIMARY KEY (`cod_Pacientes_UBS`),
+  INDEX `fk_Pacientes_UBS_conulta_paciente1_idx` (`conulta_paciente_cod_Pacientes_UBS` ASC),
+  CONSTRAINT `fk_Pacientes_UBS_conulta_paciente1`
+    FOREIGN KEY (`conulta_paciente_cod_Pacientes_UBS`)
+    REFERENCES `mydb`.`conulta_paciente` (`cod_Pacientes_UBS`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`medicamentos_UBS`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`medicamentos_UBS` (
+  `idmedicamentos_UBS` INT NOT NULL,
+  `nome_medicamentos_UBScol` VARCHAR(45) NULL,
+  `validade` DATE NULL,
+  `tipos_medicamentos` VARCHAR(45) NULL,
+  `qtds_medicamentos` TINYINT(4) NULL,
+  PRIMARY KEY (`idmedicamentos_UBS`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`medicos_especialistas`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`medicos_especialistas` (
+  `RA_medicos_especialistas` INT NOT NULL,
+  `nomes_medicos` VARCHAR(45) NULL,
+  `setor_operacao` VARCHAR(45) NULL,
+  `escala_trabalho` VARCHAR(45) NULL,
+  PRIMARY KEY (`RA_medicos_especialistas`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`UBS_SP_NOVO`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`UBS_SP_NOVO` (
+  `idUBS_SP_NOVO` INT NOT NULL,
+  `enfermeiros` VARCHAR(45) NULL,
+  `medicos_especialista` VARCHAR(45) NULL,
+  `pacientes` VARCHAR(45) NULL,
+  `medicamentos_UBS_idmedicamentos_UBS` INT NOT NULL,
+  `medicos_especialistas_RA_medicos_especialistas` INT NOT NULL,
+  PRIMARY KEY (`idUBS_SP_NOVO`),
+  INDEX `fk_UBS_SP_NOVO_medicamentos_UBS1_idx` (`medicamentos_UBS_idmedicamentos_UBS` ASC),
+  INDEX `fk_UBS_SP_NOVO_medicos_especialistas1_idx` (`medicos_especialistas_RA_medicos_especialistas` ASC),
+  CONSTRAINT `fk_UBS_SP_NOVO_medicamentos_UBS1`
+    FOREIGN KEY (`medicamentos_UBS_idmedicamentos_UBS`)
+    REFERENCES `mydb`.`medicamentos_UBS` (`idmedicamentos_UBS`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_UBS_SP_NOVO_medicos_especialistas1`
+    FOREIGN KEY (`medicos_especialistas_RA_medicos_especialistas`)
+    REFERENCES `mydb`.`medicos_especialistas` (`RA_medicos_especialistas`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`enfermeiros`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`enfermeiros` (
+  `RA_enfermeiros` INT NOT NULL,
+  `nome_enfermeiros` VARCHAR(45) NULL,
+  `setor_operacao` VARCHAR(45) NULL,
+  `escala_trabalho` DATE NULL,
+  PRIMARY KEY (`RA_enfermeiros`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Historico de exames`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Historico de exames` (
+  `cod_Pacientes_UBS` INT NOT NULL,
+  `tipo de exame` VARCHAR(45) NULL,
+  `local_exame` VARCHAR(45) NULL,
+  `nome_medico` VARCHAR(45) NULL,
+  `data consulta` DATE NULL,
+  `UBS_SP_NOVO_idUBS_SP_NOVO` INT NOT NULL,
+  PRIMARY KEY (`cod_Pacientes_UBS`, `UBS_SP_NOVO_idUBS_SP_NOVO`),
+  INDEX `fk_Historico de exames_UBS_SP_NOVO1_idx` (`UBS_SP_NOVO_idUBS_SP_NOVO` ASC))
+ENGINE = MyISAM;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Dados_pacientes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Dados_pacientes` (
+  `cod_Pacientes_UBS` INT NOT NULL,
+  `Dados_pacientescol` VARCHAR(45) NULL,
+  `nome` VARCHAR(45) NULL,
+  `UBS_SP_NOVO_idUBS_SP_NOVO` INT NOT NULL,
+  PRIMARY KEY (`cod_Pacientes_UBS`),
+  INDEX `fk_Dados_pacientes_UBS_SP_NOVO1_idx` (`UBS_SP_NOVO_idUBS_SP_NOVO` ASC))
+ENGINE = ARCHIVE;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`enfermeiros_has_UBS_SP_NOVO`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`enfermeiros_has_UBS_SP_NOVO` (
+  `enfermeiros_RA_enfermeiros` INT NOT NULL,
+  `UBS_SP_NOVO_idUBS_SP_NOVO` INT NOT NULL,
+  PRIMARY KEY (`enfermeiros_RA_enfermeiros`, `UBS_SP_NOVO_idUBS_SP_NOVO`),
+  INDEX `fk_enfermeiros_has_UBS_SP_NOVO_UBS_SP_NOVO1_idx` (`UBS_SP_NOVO_idUBS_SP_NOVO` ASC),
+  INDEX `fk_enfermeiros_has_UBS_SP_NOVO_enfermeiros1_idx` (`enfermeiros_RA_enfermeiros` ASC),
+  CONSTRAINT `fk_enfermeiros_has_UBS_SP_NOVO_enfermeiros1`
+    FOREIGN KEY (`enfermeiros_RA_enfermeiros`)
+    REFERENCES `mydb`.`enfermeiros` (`RA_enfermeiros`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_enfermeiros_has_UBS_SP_NOVO_UBS_SP_NOVO1`
+    FOREIGN KEY (`UBS_SP_NOVO_idUBS_SP_NOVO`)
+    REFERENCES `mydb`.`UBS_SP_NOVO` (`idUBS_SP_NOVO`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+USE `sys` ;
